@@ -61,4 +61,5 @@ print('Padre 1: ', parent1)
 print('Padre 2: ', parent2)
 print('Hijo 1: ', hijo1)
 print('Hijo 2: ', hijo2)
-print('Arreglo despues de la cruza: ', array1)
+binary_array = [[format(num, '04b') for num in individuo] for individuo in array1]
+print('Arreglo despues de la cruza: ', binary_array)
