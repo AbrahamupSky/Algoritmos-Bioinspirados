@@ -1,11 +1,3 @@
-# 01: Crear una poblacion inicial
-# 02: Evaluar cada individuo
-# 03: Selecciona el mejor
-# 04: Seleccionar uno de aleatoria para cruzar con otro, los hijos reemplazan a los
-# padres, los hijos se mezclan aleatoriamente, operacion de cruza, se hace un nuevo arreglo
-# que es la nueva poblacion
-# 05: Mutacion
-
 import random
 
 def calculate_aptitud(individuo):
@@ -15,7 +7,7 @@ def calculate_aptitud(individuo):
 def most_apt(array1):
   apts = [calculate_aptitud(individuo) for individuo in array1]
   better_index = apts.index(max(apts))
-  return array1[better_index], apts[better_index]
+  return array1[better_index]
 
 def cruza(padre1, padre2):
   cross_point = random.randint(1, len(padre1))
@@ -23,17 +15,17 @@ def cruza(padre1, padre2):
   hijo2 = padre2[:cross_point] + padre1[cross_point:]
   return hijo1, hijo2
 
-people = 30 #Ajustable
+people = 30 # Ajustable
 bits = 1
 range_num = range(1, 16)
 
 array1 = [[random.choice(range_num) for i in range(bits)] for i in range(people)]
 binary_array = [[format(num, '04b') for num in individuo] for individuo in array1]
-# 0 indica los 0 a la izquierda que debe tener
-# 4 indica el resultado final, osea una longitud de 4 caracteres
-# b indicamos el como se debe formatearse, en este caso, binario
 
-print(binary_array)
+print("Población inicial:")
+for i, individuo in enumerate(binary_array, start=1):
+  print(f"Individuo {i}: {individuo}")
+
 print('\n')
 
 parent_index1 = 0
@@ -53,13 +45,33 @@ for i, individuo in enumerate(array1, start = 1):
 
 print('\n')
 
-individuo, aptitud = most_apt(array1)
-print('Aptitud del individuo con mejor aptitud: ', individuo)
-print('Con una aptitud de: ', aptitud)
+individuo_mas_apto = most_apt(array1)
+print('El individuo más apto tiene un:', individuo_mas_apto)
 
-print('Padre 1: ', parent1)
-print('Padre 2: ', parent2)
-print('Hijo 1: ', hijo1)
-print('Hijo 2: ', hijo2)
-binary_array = [[format(num, '04b') for num in individuo] for individuo in array1]
-print('Arreglo despues de la cruza: ', binary_array)
+print('\n')
+
+# Realiza la cruza entre todos los padres
+num_padres = len(array1)
+
+for i in range(num_padres):
+  for j in range(i + 1, num_padres):
+    padre1 = array1[i]
+    padre2 = array1[j]
+    
+    hijo1, hijo2 = cruza(padre1, padre2)
+    
+    # Reemplazar a los padres con sus hijos en el array1
+    array1[i] = hijo1
+    array1[j] = hijo2
+
+# Convierte el arreglo a representación binaria
+arreglo_binario = [[format(num, '04b') for num in individuo] for individuo in array1]
+
+# Encuentra el individuo más apto después de la cruza
+individuo_mas_apto = most_apt(array1)
+
+print("Arreglo después de la cruza:")
+for i, individuo in enumerate(arreglo_binario, start=1):
+  print(f"Individuo {i}: {individuo}")
+
+print("El individuo más apto tiene un:", individuo_mas_apto)
